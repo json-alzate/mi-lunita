@@ -1,0 +1,7 @@
+{
+  "name": "mi-lunita",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
