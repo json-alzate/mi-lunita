@@ -1,5 +1,5 @@
 ion-fab {
-  position: absolute;
+  position: fixed;
   right: 5vw;
   top: 36vh;
 }
@@ -13,11 +13,6 @@ ion-toolbar {
   --padding-start: 16px;
 }
 
-.onWorking {
-  position: absolute;
-  right: 20vh;
-}
-
 .div-img-header {
   background: url("/assets/imgs/moon.svg");
   background-size: contain;
@@ -27,7 +22,7 @@ ion-toolbar {
 
 .div-locale-date {
   text-align: center;
-  position: absolute;
+  position: fixed;
   width: 100%;
   top: 37vh;
   h1 {

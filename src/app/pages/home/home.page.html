@@ -1,17 +1,16 @@
 <ion-content [fullscreen]="true">
 
+  <ion-datetime [(ngModel)]="pickerDateTime" (ionChange)="onChangePicker($event)" #dateTimeField
+    display-format=" hh:mm A DD.MMM" cancelText="Cerrar" doneText="Elegir"
+    monthShortNames="Ene, Feb, Mar, Abr, May, Jun, Jul, Ago, Sep, Oct, Nov, Dis" style="visibility: hidden;">
+  </ion-datetime>
+
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <div class="onWorking">
-    <ion-text color="warning">
-      <h1>En construcción</h1>
-    </ion-text>
-  </div>
-
   <ion-fab>
-    <ion-fab-button size="small">
+    <ion-fab-button size="small" (click)="openDateTimePicker()">
       <ion-icon name="create-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
@@ -28,18 +27,14 @@
           {{ currentTime }}
         </h1>
         <p style="margin-top: 0;">
-          {{ this.currentDate }} <ion-note>en {{ correntCountry }}</ion-note>
+          {{ this.currentDate }} <ion-note>en {{ currentCountry }}</ion-note>
         </p>
       </ion-text>
     </div>
   </div>
 
-  <ion-list>
-    <ion-list-header>
-      <ion-searchbar debounce="500" placeholder="Buscar país"></ion-searchbar>
-    </ion-list-header>
-
-    <ion-item *ngFor="let country of countries">
+  <div>
+    <ion-item *ngFor="let country of savedCountries">
       <ion-avatar slot="start">
         <img [src]="country.flag" />
       </ion-avatar>
@@ -51,17 +46,48 @@
           {{ country.time }}
         </h2>
       </ion-label>
-      <ion-button color="dark" slot="end" expand="block" fill="clear">
-        <ion-icon slot="icon-only" name="bookmark-outline"></ion-icon>
+      <ion-button color="dark" slot="end" expand="block" fill="clear" (click)="unSave(country)">
+        <ion-icon slot="icon-only" name="bookmark"></ion-icon>
       </ion-button>
+    </ion-item>
+  </div>
+
+  <ion-list-header class="ion-margin-top">
+    <ion-searchbar [(ngModel)]="textForSearch" placeholder="Buscar país" (ionChange)="onSearch($event)">
+    </ion-searchbar>
+  </ion-list-header>
+
+  <ion-list>
+
+    <ng-container *ngFor="let country of countries">
+
+      <ion-item *ngIf="!country.saved">
+        <ion-avatar slot="start">
+          <img [src]="country.flag" />
+        </ion-avatar>
+        <ion-label>
+          <p>
+            {{ country.name }}
+          </p>
+          <h2 class="fontOrbitronRegular">
+            {{ country.time }}
+          </h2>
+        </ion-label>
+        <ion-button color="dark" slot="end" expand="block" fill="clear" (click)="saveCountry(country)">
+          <ion-icon slot="icon-only" name="bookmark-outline"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ng-container>
+
+
+
+    <ion-item *ngIf="countries.length < 1">
+      <ion-label class="ion-text-center">¿En qué planeta queda ese país?</ion-label>
     </ion-item>
 
   </ion-list>
 
-  <ion-item>
-    <ion-datetime display-format=" hh:mm A DD.MMM" cancelText="Cerrar" doneText="Elegir"
-      monthShortNames="Ene, Feb, Mar, Abr, May, Jun, Jul, Ago, Sep, Oct, Nov, Dis"></ion-datetime>
-  </ion-item>
+
 
 
 </ion-content>
