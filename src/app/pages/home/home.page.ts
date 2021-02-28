@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
 import { format } from 'date-fns';
+import es from 'date-fns/locale/es';
 
 
 import { Country } from '@models/country.model';
@@ -11,6 +12,7 @@ import { PhrasesService } from '@services/phrases.service';
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomePage {
 
@@ -18,15 +20,28 @@ export class HomePage {
   countries: Country[] = [];
 
   formatToShow = 'hh:mm aaaa';
-  currentTimeNumber = new Date().getTime();
-  currentTime = format(new Date(), this.formatToShow);
+  currentTimeNumber;
+  currentTime;
+  currentDate;
+  correntCountry = 'Colombia';
 
   constructor(
-    private phrasesService: PhrasesService
+    private phrasesService: PhrasesService,
+    private changeDetectorRef: ChangeDetectorRef
   ) {
+    this.init();
+  }
+
+  init() {
+    this.currentTimeNumber = new Date().getTime();
+    this.currentTime = format(new Date(), this.formatToShow);
     this.phrase = this.phrasesService.showPhrase();
+    this.setDate(new Date());
     this.countriesList();
-    // console.log('pagina ', this.phrase);
+  }
+
+  setDate(date: Date) {
+    this.currentDate = format(date, `dd 'de' MMMM`, { locale: es });
   }
 
   countriesList() {
@@ -50,11 +65,31 @@ export class HomePage {
         timeZone: 'America/Mexico_City'
       },
     ];
-
+    this.orderCountries();
   }
 
   timeToOtherTimeZone(timeZone: string, locale = 'en-US'): Date {
     return new Date(new Date(this.currentTimeNumber).toLocaleString(locale, { timeZone }));
+  }
+
+  orderCountries() {
+    this.countries.sort((obj1, obj2) => {
+      if (obj1.name > obj2.name) {
+        return 1;
+      }
+      if (obj1.name < obj2.name) {
+        return -1;
+      }
+      return 0;
+    });
+    this.changeDetectorRef.markForCheck();
+  }
+
+  doRefresh(event) {
+    setTimeout(() => {
+      this.init();
+      event.target.complete();
+    }, 1000);
   }
 
 }
