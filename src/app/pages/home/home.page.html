@@ -1,0 +1,65 @@
+<ion-content>
+
+  <div class="onWorking">
+    <ion-text color="warning">
+      <h1>En construcción</h1>
+    </ion-text>
+  </div>
+
+  <ion-fab>
+    <ion-fab-button size="small">
+      <ion-icon name="create-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <div class="div-img-header">
+    <!-- <img class="" src="/assets/imgs/moon.svg" alt=""> -->
+  </div>
+
+
+  <div class="ion-padding-horizontal">
+    <div class="div-locale-date">
+      <ion-text color="dark">
+        <h1 class="fontOrbitronRegular">
+          {{ currentTime }}
+        </h1>
+      </ion-text>
+    </div>
+  </div>
+
+  <ion-list>
+    <ion-list-header>
+      <ion-searchbar debounce="500" placeholder="Buscar país"></ion-searchbar>
+    </ion-list-header>
+
+    <ion-item *ngFor="let country of countries">
+      <ion-avatar slot="start">
+        <img [src]="country.flag" />
+      </ion-avatar>
+      <ion-label>
+        <p>
+          {{ country.name }}
+        </p>
+        <h2 class="fontOrbitronRegular">
+          {{ country.time }}
+        </h2>
+      </ion-label>
+      <ion-button color="dark" slot="end" expand="block" fill="clear">
+        <ion-icon slot="icon-only" name="bookmark-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+  </ion-list>
+
+
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <p class="ion-padding-left ion-text-center">
+      <ion-note class="ion-text-wrap">
+        {{ phrase }}
+      </ion-note>
+    </p>
+  </ion-toolbar>
+</ion-footer>
